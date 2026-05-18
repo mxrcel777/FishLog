@@ -1,5 +1,4 @@
-<!-- to do: dodac style.css oraz scipt.js do index.html -->
- <!-- to do: zrobic git ignore w backendzie i zignorowac node_modules i package-lock -->
+<!-- to do: zrobic git ignore w backendzie i zignorowac node_modules i package-lock -->
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -9,23 +8,51 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-      <header>
-        <h1>FishLog</h1>
-      </header>
+      
+  <div class="container">
+    <header>
+      <h1>FishLog</h1>
+    </header>
+    
+    <div class="app-layout">
+      <main id="timeline"></main>
 
+      <!-- <aside id="leaderboard" class="leaderboard-panel">
+        <h2>Top 5 Catches</h2>
+        <ol id="leaderboard-list"></ol>
+      </aside> -->
+    </div>
+  </div>
+
+  <button id="open-btn" class="fab">+</button>
+
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>FishLog</h2>
+        <button id="close-btn">&times;</button>
+      </div>
       <section class="input-section">
-        <input type="text" id="fishName" placeholder="what did you catch?">
+        <input type="text" id="FishName" placeholder="what did you caught?">
         <input type="text" id="location" placeholder="where?">
-        <input id="note" placeholder="add a caption...">
+
+        <div style="display: flex; gap: 10px;">
+          <input type="number" id="length" placeholder="length (cm)">
+          <input type="number" id="weight" placeholder="weight (kg)">
+        </div>
+
+        <textarea id="note" placeholder="add a short description.."></textarea>
+
         <div class="input-footer">
-          <button id="addbtn">add fish</button>
+          <button id="add-btn">Add fish</button>
         </div>
       </section>
+      
+      </div>
+  </div>
+  
+  <script src="script.js"></script>
 
-      <main id="timeline"></main>
-    </div>
-    <script src="script.js"></script>
 
   </body>
   </html>

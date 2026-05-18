@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "FishLog API działa 🐟"
+    message: "FishLog API działa"
   });
 });
 
