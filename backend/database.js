@@ -9,6 +9,8 @@ db.prepare(`
     fishName TEXT NOT NULL,
     location TEXT,
     note TEXT,
+    weight INTEGER,
+    length INTEGER,
     createdAt TEXT DEFAULT CURRENT_TIMESTAMP
   )
 `).run();

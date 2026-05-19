@@ -10,7 +10,6 @@ function renderCatches(catches) {
   const timeline = document.getElementById("timeline");
   timeline.innerHTML = "";
 
-
   catches.forEach((fish) => {
     const post = document.createElement("div");
     post.className = "fish-post";
@@ -38,22 +37,22 @@ function renderCatches(catches) {
     timeline.appendChild(post);
   });
 
-//   const leaderboardList = document.getElementById("leaderboard-list");
-//   leaderboardList.innerHTML = "";
+  //   const leaderboardList = document.getElementById("leaderboard-list");
+  //   leaderboardList.innerHTML = "";
 
-//   const topCatches = [...catches]
-//     .sort((a, b) => b.length - a.length)
-//     .slice(0, 5);
+  //   const topCatches = [...catches]
+  //     .sort((a, b) => b.length - a.length)
+  //     .slice(0, 5);
 
-//   topCatches.forEach((fish, index) => {
-//     const li = document.createElement("li");
-//     li.innerHTML = `
-//                 <span class="rank-num">#${index + 1}</span>
-//                 <span class="rank-name">${fish.fishName}</span>
-//                 <span class="rank-size">#${fish.length} cm</span>
-//             `;
-//     leaderboardList.appendChild(li);
-//   });
+  //   topCatches.forEach((fish, index) => {
+  //     const li = document.createElement("li");
+  //     li.innerHTML = `
+  //                 <span class="rank-num">#${index + 1}</span>
+  //                 <span class="rank-name">${fish.fishName}</span>
+  //                 <span class="rank-size">#${fish.length} cm</span>
+  //             `;
+  //     leaderboardList.appendChild(li);
+  //   });
 }
 
 // usuwanie ryb
@@ -76,6 +75,40 @@ async function deleteCatch(id) {
 }
 
 // edytowanie ryb
+async function editCatch(id) {
+  const newName = prompt("enter new fish name:");
+
+  if (newName === null) return; // po kliknieciu anuluj funkcja sie przerywa
+
+  const newLocation = prompt("new location:");
+  const newNote = prompt("new note:");
+  const newLength = prompt("new length:") || 0;
+  const newWeight = prompt("new weight:") || 0;
+
+  const updatedData = {
+    fishName: newName,
+    location: newLocation,
+    note: newNote,
+    length: Number(newLength),
+    weight: Number(newWeight)
+  };
+
+  
+    const response = await fetch(`http://localhost:3000/catches/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (response.ok) {
+      console.log("fish updated");
+      getCatches();
+    }
+  } 
+  
+
 
 const modal = document.getElementById("modal-overlay");
 const openBtn = document.getElementById("open-btn");

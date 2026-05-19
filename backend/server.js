@@ -21,6 +21,8 @@ app.post("/catches", (req, res) => {
 const fishName = req.body.fishName
 const location = req.body.location
 const note = req.body.note
+const length = req.body.length 
+const weight = req.body.weight
 
   if (!fishName) {
     return res.status(400).json({
@@ -30,10 +32,10 @@ const note = req.body.note
 
   const result = db
     .prepare(`
-      INSERT INTO catches (fishName, location, note)
-      VALUES (?, ?, ?)
+      INSERT INTO catches (fishName, location, note, length, weight)
+      VALUES (?, ?, ?, ?, ?)
     `)
-    .run(fishName, location, note);
+    .run(fishName, location, note, length, weight);
 
   const newCatch = db
     .prepare("SELECT * FROM catches WHERE id = ?")
@@ -53,7 +55,35 @@ app.get("/catches", (req, res) => {
   // 2. odeślij je przez res.json(...)
   res.json(catches);
 });
- 
+
+// dodac delete
+app.delete("/catches/:id", (req, res) => {
+  const id = req.params.id
+  // wywolac db.prepare zeby usunelo record
+  const pre = db.prepare("DELETE FROM catches WHERE id = ?").run(id); //zapytanie do sql, ? - sluzy jako antywirus
+
+  if (pre.changes > 0) {
+    res.status(200).json({ message: "deleted"}); // wiadomosc do frontend ze wszystko dziala lub nie jak jest ponizej
+} else {
+    res.status(404).json({ error: "couldn't find a fish with this ID"});
+}
+});
+
+// edycja
+app.put("/catches/:id", (req, res) => {
+  const id = req.params.id;
+
+  const fishName = req.body.fishName
+  const location = req.body.location
+  const note = req.body.note
+  const length = req.body.length 
+  const weight = req.body.weight
+
+  db.prepare("UPDATE catches SET fishName = ?, location = ?, note = ?, length = ?, weight = ? WHERE id = ?").run(fishName, location, note, length, weight, id);
+
+  res.status(200).json({ message: "updated"});
+});
+
 app.listen(PORT, () => {
   console.log(`FishLog API działa na http://localhost:${PORT}`);
 });
