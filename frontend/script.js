@@ -37,23 +37,49 @@ function renderCatches(catches) {
     timeline.appendChild(post);
   });
 
-  //   const leaderboardList = document.getElementById("leaderboard-list");
-  //   leaderboardList.innerHTML = "";
+  // leaderboard po dlugosci ryb
+  const lengthList = document.getElementById("leaderboard-length");
+     if (lengthList) {
+     lengthList.innerHTML = "";
 
-  //   const topCatches = [...catches]
-  //     .sort((a, b) => b.length - a.length)
-  //     .slice(0, 5);
+     const topLength = catches
+       .sort((a, b) => b.length - a.length)
+       .slice(0, 3);
 
-  //   topCatches.forEach((fish, index) => {
-  //     const li = document.createElement("li");
-  //     li.innerHTML = `
-  //                 <span class="rank-num">#${index + 1}</span>
-  //                 <span class="rank-name">${fish.fishName}</span>
-  //                 <span class="rank-size">#${fish.length} cm</span>
-  //             `;
-  //     leaderboardList.appendChild(li);
-  //   });
-}
+     topLength.forEach((fish, index) => {
+       const len = document.createElement("len");
+       len.innerHTML = `
+                   <span class="rank-num">#${index + 1}</span>
+                   <span class="rank-name">${fish.fishName}</span>
+                   <span class="rank-size">${fish.length} cm</span>
+               `;
+       lengthList.appendChild(len);
+     });
+    }
+
+
+// leaderboard po kilogramach
+
+const weightList = document.getElementById("leaderboard-weight");
+     if (weightList) {
+     weightList.innerHTML = "";
+
+     const topWeight = catches
+      .sort((a, b) => b.weight - a.weight)
+      .slice(0, 3);
+
+     topWeight.forEach((fish, index) => {
+      const len = document.createElement("len");
+      len.innerHTML = `
+                   <span class="rank-num">#${index + 1}</span>
+                   <span class="rank-name">${fish.fishName}</span>
+                   <span class="rank-size">${fish.weight} kg</span>
+               `;
+                weightList.appendChild(len);
+     });
+    }
+  }
+
 
 // usuwanie ryb
 
