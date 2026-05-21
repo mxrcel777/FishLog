@@ -207,14 +207,16 @@ document.getElementById("add-btn").onclick = async function () {
 
 async function weather(cityName = "Warsaw") {
   const container = document.getElementById('weather-container');
+  const fishingContainer = document.getElementById('fishing-conditions');
 
-  try {
+  try { //pobranie danych z geocoding
     const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`
     const geoResponse = await fetch(geoUrl);
     const geoData = await geoResponse.json();
     // zabezpieczenie przed wpisywaniem losowych liter
     if (!geoData.results || geoData.results.length === 0 ) {
       container.innerHTML = '<p class="weather-error" style="color: #ff4a4a;">City not found...</p>';
+      if (fishingContainer) fishingContainer.innerHTML = "";
       return;
     }
     // dane z meteo
@@ -227,6 +229,9 @@ async function weather(cityName = "Warsaw") {
     const response = await fetch(weatherUrl);
     const data = await response.json();
     const current = data.current;
+
+    const temp = current.apparent_temperature;
+    const wind = current.wind_speed_10m;
 
     document.getElementById('weather-container').innerHTML = `
     <div class="weather-city" style="color: aqua; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;"> ${foundCity} </div>
@@ -242,6 +247,32 @@ async function weather(cityName = "Warsaw") {
       <span class="weather-value">${current.wind_speed_10m} m/s</span>
       </div>
   `;
+
+  let status = "Okay";
+  let color = "orange";
+  let emoji = "🟧";
+
+  if (temp >= 12 && temp <= 22 && wind < 5) {
+    status = "GOATED";
+    color = "aquamarine";
+    emoji = "🟩"
+  } else if (temp > 28 || wind > 8) {
+    status = "Just go home (Too hot / windy)";
+    color = "red"
+    emoji = "🟥"
+  } else if (temp < 5) {
+    status = "It's freezing";
+    color = "grey";
+    emoji = "🟦"
+  }
+  if (fishingContainer) {
+      fishingContainer.innerHTML = `
+        <div style="font-size: 0.9rem; color: #71767b; margin-bottom: 4px; margin-top: 5px; padding-top: 5px;">Fishing Forecast:</div>
+        <div style="color: ${color}; font-weight: bold; font-size: 1.05rem;">
+          ${emoji} ${status}
+        </div>
+      `;
+    }
   } catch (error) {
     document.getElementById('weather-container').innerHTML = '<p class="weather-error">Failed to load weather</p>';
 
