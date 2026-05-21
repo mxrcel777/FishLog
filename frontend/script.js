@@ -20,6 +20,8 @@ function renderCatches(catches) {
     const fishLength = fish.length || 0;
     const fishWeight = fish.weight || 0;
 
+    const imageHtml = fish.image ? `<img src="${fish.image}" class="post-img" alt="${fish.fishName}">` : "";
+
     post.innerHTML = `
         <div class="fish-post-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h3>${fish.fishName}</h3>
@@ -31,6 +33,8 @@ function renderCatches(catches) {
         <p class="fish-cmkg"> ${fishLength} cm | ${fishWeight} kg</p>
         <p>📍 ${fish.location || "Unknown"}</p>
         <p>${fish.note || ""}</p>
+
+        ${imageHtml}
         <hr>
             `;
 
@@ -110,6 +114,7 @@ async function editCatch(id) {
   const newNote = prompt("new note:");
   const newLength = prompt("new length:") || 0;
   const newWeight = prompt("new weight:") || 0;
+  // dodac image
 
   const updatedData = {
     fishName: newName,
@@ -117,6 +122,7 @@ async function editCatch(id) {
     note: newNote,
     length: Number(newLength),
     weight: Number(newWeight)
+    // dodac image
   };
 
   
@@ -153,6 +159,7 @@ document.getElementById("add-btn").onclick = async function () {
   const noteInput = document.getElementById("note");
   const lengthInput = document.getElementById("length");
   const weightInput = document.getElementById("weight");
+  const fishImageInput = document.getElementById("fishImage");
 
   const newCatch = {
     fishName: fishNameInput.value,
@@ -160,6 +167,7 @@ document.getElementById("add-btn").onclick = async function () {
     length: Number(lengthInput.value) || 0,
     weight: Number(weightInput.value) || 0,
     note: noteInput.value,
+    image: fishImageInput.value
   };
 
   lengthInput.value = "";
@@ -185,6 +193,7 @@ document.getElementById("add-btn").onclick = async function () {
       fishNameInput.value = "";
       locationInput.value = "";
       noteInput.value = "";
+      fishImageInput.value = "";
 
       document.getElementById("modal-overlay").style.display = "none";
 
@@ -194,3 +203,55 @@ document.getElementById("add-btn").onclick = async function () {
     console.error("error:", error);
   }
 };
+
+
+async function weather(cityName = "Warsaw") {
+  const container = document.getElementById('weather-container');
+
+  try {
+    const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`
+    const geoResponse = await fetch(geoUrl);
+    const geoData = await geoResponse.json();
+    // zabezpieczenie przed wpisywaniem losowych liter
+    if (!geoData.results || geoData.results.length === 0 ) {
+      container.innerHTML = '<p class="weather-error" style="color: #ff4a4a;">City not found...</p>';
+      return;
+    }
+    // dane z meteo
+    const latitude = geoData.results[0].latitude;
+    const longitude = geoData.results[0].longitude;
+    const foundCity = geoData.results[0].name;
+
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m&wind_speed_unit=ms`
+
+    const response = await fetch(weatherUrl);
+    const data = await response.json();
+    const current = data.current;
+
+    document.getElementById('weather-container').innerHTML = `
+    <div class="weather-city" style="color: aqua; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;"> ${foundCity} </div>
+    <div class="weather-main-row">
+      <span class="weather-temp">${current.apparent_temperature}°C</span>
+      </div>
+    <div class="weather-data-row">
+      <span> Humidity:</span>
+      <span class="weather-value">${current.relative_humidity_2m}%</span>
+      </div>
+    <div class="weather-data-row">
+      <span> Wind:</span>
+      <span class="weather-value">${current.wind_speed_10m} m/s</span>
+      </div>
+  `;
+  } catch (error) {
+    document.getElementById('weather-container').innerHTML = '<p class="weather-error">Failed to load weather</p>';
+
+  }
+};
+
+document.getElementById('weather-city-input').onkeypress = function (e) {
+  if (e.key === 'Enter' && this.value.trim() !== "") {
+    weather(this.value.trim());
+  }
+};
+
+weather();

@@ -15,4 +15,9 @@ db.prepare(`
   )
 `).run();
 
+db.prepare(`
+  ALTER TABLE catches ADD image TEXT
+  `).run();
 export default db;
+
+

@@ -123,8 +123,8 @@ body {
 }
 
 #timeline {
-    flex: 1;
-    max-width: 7500px;
+    max-width: 800px;
+    width: 100%;
     margin: 20px auto;
 }
 
@@ -135,6 +135,7 @@ body {
     padding: 15px;
     margin-bottom: 15px;
     color: white;
+    width: 100%;
 }
 
 .fish-post h3 {
@@ -155,12 +156,10 @@ body {
 
 .app-layout {
     display: flex;
-    gap: 50px;
+    gap: 40px;
     width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 15px;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .leaderboard-panel {
@@ -254,4 +253,73 @@ body {
 
 .delete-btn:hover {
     background-color: rgba(202, 34, 45, 0.1);
+}
+
+
+
+
+.weather-panel {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0;
+}
+
+.weather-panel h3 {
+    color: #e7e9ea;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+.weather-main-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.weather-temp {
+    color: #e7e9ea;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.weather-feels {
+    color: #71767b;
+    align-self: center;
+    font-size: 0.9rem;
+}
+
+.weather-data-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #e7e9ea;
+}
+
+.weather-value {
+    color: #1d9bf0;
+    font-weight: bold;
+}
+
+.weather-error {
+    color: #ff3333;
+    font-size: 0.9rem;
+}
+
+.left-panel {
+    position: sticky;
+    top: 20px;
+    width: 500px;
+    background-color: #16181c;
+    border: 1px solid #2f3336;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.post-img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-top: 12px;
+    border: 1px solid #2f3336;
 }

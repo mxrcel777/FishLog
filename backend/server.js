@@ -23,6 +23,7 @@ const location = req.body.location
 const note = req.body.note
 const length = req.body.length 
 const weight = req.body.weight
+const image = req.body.image
 
   if (!fishName) {
     return res.status(400).json({
@@ -32,10 +33,10 @@ const weight = req.body.weight
 
   const result = db
     .prepare(`
-      INSERT INTO catches (fishName, location, note, length, weight)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO catches (fishName, location, note, length, weight, image)
+      VALUES (?, ?, ?, ?, ?, ?)
     `)
-    .run(fishName, location, note, length, weight);
+    .run(fishName, location, note, length, weight, image);
 
   const newCatch = db
     .prepare("SELECT * FROM catches WHERE id = ?")
@@ -78,6 +79,7 @@ app.put("/catches/:id", (req, res) => {
   const note = req.body.note
   const length = req.body.length 
   const weight = req.body.weight
+  const image = req.body.image
 
   db.prepare("UPDATE catches SET fishName = ?, location = ?, note = ?, length = ?, weight = ? WHERE id = ?").run(fishName, location, note, length, weight, id);
 
